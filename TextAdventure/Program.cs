@@ -23,17 +23,22 @@ namespace TextAdventure
         public static int[] GenerateStats()
         {
             int[] playerStats = new int[3];
-            Random rnd = new Random();
 
             while (playerStats[0] + playerStats[1] + playerStats[2] != 5)
             {
                 for (int i = 0; i < playerStats.Length; i++)
                 {
-                    playerStats[i] = rnd.Next(1, 3);
+                    playerStats[i] = GenerateRandomInt(1,3);
                 }
             }
 
             return playerStats;
+        }
+
+        public static int GenerateRandomInt(int lowerBound, int upperBound)
+        {
+            Random rnd = new Random();
+            return rnd.Next(lowerBound, upperBound);
         }
 
     }
