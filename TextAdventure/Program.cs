@@ -11,6 +11,8 @@ namespace TextAdventure
             int[] playerStats = GenerateStats();
 
             DisplayStats(playerStats[0], playerStats[1], playerStats[2]);
+
+
         }
 
         public static void DisplayStats(int heart, int mind, int body)
@@ -39,6 +41,33 @@ namespace TextAdventure
         {
             Random rnd = new Random();
             return rnd.Next(lowerBound, upperBound);
+        }
+
+        public static string GenerateEvent()
+        {
+            int rnd = GenerateRandomInt(1, 100);
+
+            if (rnd <= 30)
+            {
+                return "Combat";
+            }
+            else if (rnd <=50)
+            {
+                return "Investigation";
+            }
+            else if (rnd<=70)
+            {
+                return "Challenge";
+            }
+            else if (rnd<=85)
+            {
+                return "Treasure";
+            }
+            else
+            {
+                return "Rest";
+            }
+
         }
 
     }
