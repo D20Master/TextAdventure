@@ -9,7 +9,18 @@ namespace TextAdventure
         static void Main(string[] args)
         {
             int[] playerStats = GenerateStats();
-            DisplayStats(playerStats[0], playerStats[1], playerStats[2], playerStats[3]);
+            string[] eventDetails = null;
+
+            while (playerStats[0] <= 10)
+            {
+
+                DisplayStats(playerStats[0], playerStats[1], playerStats[2], playerStats[3]);
+                eventDetails = GenerateEvent();
+                Console.WriteLine(eventDetails[0] + " " + eventDetails[1]);
+                playerStats[0]++;
+                Console.WriteLine();
+
+            }
 
         }
 
@@ -30,7 +41,7 @@ namespace TextAdventure
             {
                 for (int i = 1; i < playerStats.Length; i++)
                 {
-                    playerStats[i] = GenerateRandomInt(1, 3);
+                    playerStats[i] = GenerateRandomInt(1, 4);
                 }
             }
 
@@ -43,33 +54,43 @@ namespace TextAdventure
             return rnd.Next(lowerBound, upperBound);
         }
 
-        public static string GenerateEvent()
+        public static string[] GenerateEvent()
         {
-            int rnd = GenerateRandomInt(1, 100);
+            string[] eventDetails = new string[2];
+            int eventType = GenerateRandomInt(1, 101);
+            string eventLvl= GenerateRandomInt(1, 4).ToString();
 
-            if (rnd <= 30)
+            if (eventType <= 30)
             {
-                return "Combat";
+                eventDetails[0] = "Combat";
+                eventDetails[1] = eventLvl;
             }
-            else if (rnd <=50)
+            else if (eventType <= 50)
             {
-                return "Investigation";
+                eventDetails[0] = "Investigation";
+                eventDetails[1] = eventLvl;
             }
-            else if (rnd<=70)
+            else if (eventType <= 70)
             {
-                return "Challenge";
+                eventDetails[0] = "Challenge";
+                eventDetails[1] = eventLvl;
             }
-            else if (rnd<=85)
+            else if (eventType <= 85)
             {
-                return "Treasure";
+                eventDetails[0] = "Treasure";
+                eventDetails[1] = eventLvl;
             }
             else
             {
-                return "Rest";
+                eventDetails[0] = "Rest";
+                eventDetails[1] = eventLvl;
             }
 
+            return eventDetails;
         }
 
+
     }
-}
+}       
+
 
