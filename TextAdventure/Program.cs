@@ -9,14 +9,13 @@ namespace TextAdventure
         static void Main(string[] args)
         {
             int[] playerStats = GenerateStats();
-
-            DisplayStats(playerStats[0], playerStats[1], playerStats[2]);
-
+            DisplayStats(playerStats[0], playerStats[1], playerStats[2], playerStats[3]);
 
         }
 
-        public static void DisplayStats(int heart, int mind, int body)
+        public static void DisplayStats(int level, int heart, int mind, int body)
         {
+            Console.WriteLine($"Player Lvl: {level}");
             Console.WriteLine($"Heart: {heart}");
             Console.WriteLine($"Mind: {mind}");
             Console.WriteLine($"Body: {body}");
@@ -24,13 +23,14 @@ namespace TextAdventure
 
         public static int[] GenerateStats()
         {
-            int[] playerStats = new int[3];
+            int[] playerStats = new int[4];
+            playerStats[0] = 1;
 
-            while (playerStats[0] + playerStats[1] + playerStats[2] != 5)
+            while (playerStats[1] + playerStats[2] + playerStats[3] != 5)
             {
-                for (int i = 0; i < playerStats.Length; i++)
+                for (int i = 1; i < playerStats.Length; i++)
                 {
-                    playerStats[i] = GenerateRandomInt(1,3);
+                    playerStats[i] = GenerateRandomInt(1, 3);
                 }
             }
 
