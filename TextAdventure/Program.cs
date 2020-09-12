@@ -16,7 +16,7 @@ namespace TextAdventure
 
                 DisplayStats(playerStats[0], playerStats[1], playerStats[2], playerStats[3]);
                 eventDetails = GenerateEvent();
-                Console.WriteLine(eventDetails[0] + " " + eventDetails[1]);
+                Console.WriteLine(eventDetails[2]);
                 playerStats[0]++;
                 Console.WriteLine();
 
@@ -56,39 +56,133 @@ namespace TextAdventure
 
         public static string[] GenerateEvent()
         {
-            string[] eventDetails = new string[2];
-            int eventType = GenerateRandomInt(1, 101);
-            string eventLvl= GenerateRandomInt(1, 4).ToString();
+            string[] eventDetails = new string[9];
 
-            if (eventType <= 30)
+            int rnd = GenerateRandomInt(1, 101);
+
+            string eventType = null;
+            string eventLvl = GenerateRandomInt(1, 4).ToString();
+            string eventDescription = null;
+            string eventSuccess = null;
+            string eventFail = null;
+            string eventRun = null;
+            string eventAlt = null;
+
+
+
+            if (rnd <= 30)
             {
-                eventDetails[0] = "Combat";
-                eventDetails[1] = eventLvl;
+                eventType = "Combat";
             }
-            else if (eventType <= 50)
+            else if (rnd <= 50)
             {
-                eventDetails[0] = "Investigation";
-                eventDetails[1] = eventLvl;
+                eventType = "Puzzle";
             }
-            else if (eventType <= 70)
+            else if (rnd <= 70)
             {
-                eventDetails[0] = "Challenge";
-                eventDetails[1] = eventLvl;
+                eventType = "Challenge";
             }
-            else if (eventType <= 85)
+            else if (rnd <= 85)
             {
-                eventDetails[0] = "Treasure";
-                eventDetails[1] = eventLvl;
+                eventType = "Treasure";
             }
             else
             {
-                eventDetails[0] = "Rest";
-                eventDetails[1] = eventLvl;
+                eventType = "Rest";
             }
 
-            return eventDetails;
-        }
+            switch (eventType + eventLvl)
+            {
+                case "Combat1":
+                    eventDescription = "A slow flying bug flutters around your head trying to get through your armour.";
+                    eventSuccess = "You swat the fly and move on with you adventure.";
+                    eventFail = "You hear a buzzing sound in your ear and a sharp pain.";
+                    eventAlt = "The fly takes a tiny piece copper and lazly flys away.";
+                    break;
+                case "Combat2":
+                    eventDescription = "A bandit dashes out from a rocky outcropping sword in hand.";
+                    eventSuccess = "You parry the bandits blade and swiftly disbatch them.";
+                    eventFail = "You fumble for you sword as the bandit strikes you across the chest.";
+                    eventAlt = "Reaching in your puch you pull out some of you treasure and toss it in another direction. The bandit is distracted long enough for you to get awawy.";
+                    break;
+                case "Combat3":
+                    eventDescription = "You enter a large cavern. A deep rumble shakes the ground around you. In the darkness a large yellow eye opens.";
+                    eventSuccess = "Looking around in panick you notice a pillar leaning slightly. You dash toward it striking it with you shoulder. The pillar creaks and falls onto the beast.";
+                    eventFail = "Before you can register what it is the monster strikes fligging you across the room.";
+                    eventAlt = "From your pouch you produce a large gem and plead with the beast. A claw emerges from the shadows and picks up the gem. You are allowed to continue on.";
+                    break;
+                case "Puzzle1":
+                    eventDescription = "A old wooden door with a rusty lock bars you path into the next room.";
+                    eventSuccess = "You pull out a pick from your pack swiftly dismantle the lock.";
+                    eventFail = "Your fingers slip while trying to pick the lock cutting you hand on the rusty edge.";
+                    //eventAlt = "It's an old wooden door... you knock it down.";
+                    break;
+                case "Puzzle2":
+                    eventDescription = "Three doors stand in your path each appearing to be identical.";
+                    eventSuccess = "From under the left door you feel a feight breeze. You open the door an proceeed onwards.";
+                    eventFail = "You open the closet door and walk through and notice there is no floor beneath your feet.";
+                    //eventAlt = ""
+                    break;
+                case "Puzzle3":
+                    eventDescription = "As you enter the next room the door slams shut behind you and the room goes dark. A mirror lights up on the other side of the room.";
+                    eventSuccess = "Shifting your reflection you notice another door only in the reflection. You move to open the door from the mirror perspective. The door opens and continue onwards.";
+                    eventFail = "In frustration you shatter the mirror. Shards of glass cut you into you. ";
+                    //eventAlt = ""
+                    break;
+                case "Challenge1":
+                    eventDescription = "Walking along a rift in the ground opens up before you.";
+                    eventSuccess = "You react quickly before the rift expands and jump across to the other side.";
+                    eventFail = "You stumble trying to jump across and fall into the rift.";
+                    //eventAlt = ""
+                    break;
+                case "Challenge2":
+                    eventDescription = "From behind you comes a rumbling sound as you see a large bolder rolling your way.";
+                    eventSuccess = "You run as fast as your legs will carry you. Down the fall you see a split in the path. You go right just as the bolder rolls by on your left.";
+                    eventFail = "You are far to slow and the bolder overtakes and you are curshed.";
+                    //eventAlt = ""
+                    break;
+                case "Challenge3":
+                    eventDescription = "With your next step you hear a click and a whoosh of air as arrows fly out of the wall.";
+                    eventSuccess = "Your deftly manuver through the hall dogding the arrows.";
+                    eventFail = "Try as you might you are bombarded by arrows.";
+                    //eventAlt = ""
+                    break;
+                case "Treasure1":
+                    eventDescription = "You find a bag of discarded trinkets.";
+                    break;
+                case "Treasure2":
+                    eventDescription = "The body of a previous adventurer lies in you path. You decide to take their goods. Might help you survive longer then them.";
+                    break;
+                case "Treasure3":
+                    eventDescription = "Gleaming light can be seen down the hall. You walk into a room with piles of gold. You pocket a few handfuls and continue on.";
+                    break;
+                case "Rest1":
+                    eventDescription = "You stumble upon a knook in the dungeon and settle down to rest. You can hear ominous footsteps in the distance.";
+                    break;
+                case "Rest2":
+                    eventDescription = "You open the door into an empty room. You decide to bar the door and take a short rest.";
+                    break;
+                case "Rest3":
+                    eventDescription = "You stumble upon a open cavern a glowing pool of water at its center. You take a sip and feel rejuvinated.";
+                    break;
+                default:
+                    eventDescription = "ERROR";
+                    break;
 
+                
+            }
+
+            eventDetails[0] = eventType;
+            eventDetails[1] = eventLvl;
+            eventDetails[2] = eventDescription;
+            eventDetails[3] = eventSuccess;
+            eventDetails[4] = eventFail;
+            eventDetails[5] = eventRun;
+            eventDetails[6] = eventAlt;
+
+            return eventDetails;
+
+        }
 
     }
 }       
