@@ -14,9 +14,14 @@ namespace TextAdventure
             while (playerStats[0] <= 10)
             {
 
+                //Display player stats and generates first event.
                 DisplayStats(playerStats[0], playerStats[1], playerStats[2], playerStats[3]);
                 eventDetails = GenerateEvent();
                 Console.WriteLine(eventDetails[2]);
+
+                //Display player actions and get response.
+                PlayerActions(eventDetails);
+
                 playerStats[0]++;
                 Console.WriteLine();
 
@@ -115,37 +120,37 @@ namespace TextAdventure
                     eventDescription = "A old wooden door with a rusty lock bars you path into the next room.";
                     eventSuccess = "You pull out a pick from your pack swiftly dismantle the lock.";
                     eventFail = "Your fingers slip while trying to pick the lock cutting you hand on the rusty edge.";
-                    //eventAlt = "It's an old wooden door... you knock it down.";
+                    eventAlt = "It's an old wooden door... you knock it down.";
                     break;
                 case "Puzzle2":
                     eventDescription = "Three doors stand in your path each appearing to be identical.";
                     eventSuccess = "From under the left door you feel a feight breeze. You open the door an proceeed onwards.";
                     eventFail = "You open the closet door and walk through and notice there is no floor beneath your feet.";
-                    //eventAlt = ""
+                    eventAlt = "No need for thinking you open the first door and a spear comes shooting out. However, you react quicly dodge it.";
                     break;
                 case "Puzzle3":
                     eventDescription = "As you enter the next room the door slams shut behind you and the room goes dark. A mirror lights up on the other side of the room.";
                     eventSuccess = "Shifting your reflection you notice another door only in the reflection. You move to open the door from the mirror perspective. The door opens and continue onwards.";
                     eventFail = "In frustration you shatter the mirror. Shards of glass cut you into you. ";
-                    //eventAlt = ""
+                    eventAlt = "You smash into the wall until you make your own door.";
                     break;
                 case "Challenge1":
                     eventDescription = "Walking along a rift in the ground opens up before you.";
                     eventSuccess = "You react quickly before the rift expands and jump across to the other side.";
                     eventFail = "You stumble trying to jump across and fall into the rift.";
-                    //eventAlt = ""
+                    eventAlt = "From your pouch you grab a grappling hook and throw it across to the other side.";
                     break;
                 case "Challenge2":
                     eventDescription = "From behind you comes a rumbling sound as you see a large bolder rolling your way.";
                     eventSuccess = "You run as fast as your legs will carry you. Down the fall you see a split in the path. You go right just as the bolder rolls by on your left.";
                     eventFail = "You are far to slow and the bolder overtakes and you are curshed.";
-                    //eventAlt = ""
+                    eventAlt = "Grabing random items from your pouch you create a chock and brace yourself. Miraculously the boulder is stopped.";
                     break;
                 case "Challenge3":
                     eventDescription = "With your next step you hear a click and a whoosh of air as arrows fly out of the wall.";
                     eventSuccess = "Your deftly manuver through the hall dogding the arrows.";
                     eventFail = "Try as you might you are bombarded by arrows.";
-                    //eventAlt = ""
+                    eventAlt = "You take your sheild and pouch holder one in each arm allowing the arrow to strike into them.";
                     break;
                 case "Treasure1":
                     eventDescription = "You find a bag of discarded trinkets.";
@@ -169,7 +174,7 @@ namespace TextAdventure
                     eventDescription = "ERROR";
                     break;
 
-                
+
             }
 
             eventDetails[0] = eventType;
@@ -182,8 +187,70 @@ namespace TextAdventure
 
             return eventDetails;
 
+
         }
 
+        public static void PlayerActions(string[] eventDetails)
+        {
+
+            string eventType = eventDetails[0];
+            string eventLvl = eventDetails[1];
+                
+            switch (eventType + eventLvl)
+            {
+                case "Combat1":
+
+                    Console.WriteLine("Fight = 1 / Flee = 2 / Bargain = 3");
+                    
+                    break;
+                case "Combat2":
+
+                    Console.WriteLine("Fight = 1 / Flee = 2 / Bargain = 3");
+
+                    break;
+                case "Combat3":
+
+                    Console.WriteLine("Fight = 1 / Flee = 2 / Bargain = 3");
+
+                    break;
+                case "Puzzle1":
+
+                    Console.WriteLine("Solve = 1 / Brute = 2");
+
+                    break;
+                case "Puzzle2":
+
+                    Console.WriteLine("Solve = 1 / Brute = 2");
+
+                    break;
+                case "Puzzle3":
+
+                    Console.WriteLine("Solve = 1 / Brute = 2");
+
+                    break;
+                case "Challenge1":
+
+                    Console.WriteLine("Survive = 1 / Craft = 2");
+
+                    break;
+                case "Challenge2":
+
+                    Console.WriteLine("Survive = 1 / Craft = 2");
+
+                    break;
+                case "Challenge3":
+
+                    Console.WriteLine("Survive = 1 / Craft = 2");
+                    break;
+
+                default:
+                    Console.WriteLine("You continue onwards.");
+
+                    break;
+
+            }
+
+        }
     }
 }       
 
