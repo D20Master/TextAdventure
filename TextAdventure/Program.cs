@@ -11,16 +11,16 @@ namespace TextAdventure
             int[] playerStats = GenerateStats();
             string[] eventDetails = null;
 
-            while (playerStats[0] <= 10 || playerStats[1] != 0)
+            while (playerStats[1] != 0)
             {
 
                 //Display player stats and generates first event.
-                DisplayStats(playerStats[0], playerStats[1], playerStats[2], playerStats[3]);
-                eventDetails = GenerateEvent();
-                Console.WriteLine(eventDetails[2]);
+                DisplayStats(playerStats[0], playerStats[1], playerStats[2], playerStats[3], playerStats[4]);
+                eventDetails = GenerateEvent(playerStats);
 
-                //Display player choices and outcome
-                PlayerActions(eventDetails);
+                Console.WriteLine(eventDetails[2]); //event description
+
+                PlayerActions(eventDetails); //Display player choices and outcome
 
                 if (LevelUpEvent(eventDetails))
                 {
@@ -28,59 +28,79 @@ namespace TextAdventure
                     string failEvent = eventDetails[4];
                     string altEvent = eventDetails[5];
 
+
                     int playerInput = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
 
                     if (PlayerOutcome(playerStats, eventDetails, playerInput))
                     {
-                        if (playerInput==1)
+
+                        if (playerInput == 1)  //sucessful event
                         {
                             Console.WriteLine(successEvent);
+                            Console.WriteLine("Click Enter to continue.");
+                        }
+                        else if (LootCheck(playerStats)) //succeful event alt
+                        { 
+                            Console.WriteLine(altEvent);
+                            Console.WriteLine("You used up 1 loot.\nClick Enter to continue.");
+                            playerStats[4]--;
+
                         }
                         else
                         {
-                            Console.WriteLine(altEvent);
+                            Console.WriteLine("You fumbled through your empty pockets");
+                            Console.WriteLine(successEvent); // if no loot revert to other
                         }
+
                     }
                     else
                     {
                         Console.WriteLine(failEvent);
+                        Console.WriteLine("You lost 1 heart.\nClick Enter to continue.");
                         playerStats[1]--;
-                        Console.ReadLine();
                     }
 
                     playerStats[0]++;
                 }
-                else
-                {
-                    Console.ReadLine();
-                }
 
-                Console.WriteLine();
+                Console.ReadLine();
+                Console.Clear();
 
             }
 
         }
 
-        public static void DisplayStats(int level, int heart, int mind, int body)
+        public static void DisplayStats(int level, int heart, int mind, int body, int loot)
         {
-            Console.WriteLine($"Player Lvl: {level}");
+            Console.WriteLine($"Floor Lvl: {level}");
             Console.WriteLine($"Heart: {heart}");
             Console.WriteLine($"Mind: {mind}");
             Console.WriteLine($"Body: {body}");
+            Console.WriteLine($"Loot: {loot}");
+            Console.WriteLine();
+            
+        }
+
+        public static bool LootCheck(int[] playerStats)
+        {
+            return playerStats[4] > 0;
         }
 
         public static int[] GenerateStats()
         {
-            int[] playerStats = new int[4];
-            playerStats[0] = 1;
+            int[] playerStats = new int[5];
 
-            while (playerStats[1] + playerStats[2] + playerStats[3] != 5)
+            while (playerStats[2] + playerStats[3] + playerStats[4] != 5)
             {
-                for (int i = 1; i < playerStats.Length; i++)
+                for (int i = 2; i < playerStats.Length; i++)
                 {
                     playerStats[i] = GenerateRandomInt(1, 4);
                 }
             }
+
+            playerStats[0] = 1;
+            playerStats[1] = 3;
 
             return playerStats;
         }
@@ -91,7 +111,7 @@ namespace TextAdventure
             return rnd.Next(lowerBound, upperBound);
         }
 
-        public static string[] GenerateEvent()
+        public static string[] GenerateEvent(int[] playerStats)
         {
             string[] eventDetails = new string[8];
 
@@ -106,21 +126,21 @@ namespace TextAdventure
 
 
 
-            if (rnd <= 30)
+            if (rnd <= 40)
             {
                 eventType = "Combat";
             }
-            else if (rnd <= 50)
+            else if (rnd <= 60)
             {
                 eventType = "Puzzle";
             }
-            else if (rnd <= 70)
+            else if (rnd <= 80)
             {
                 eventType = "Challenge";
             }
-            else if (rnd <= 85)
+            else if (rnd <= 90)
             {
-                eventType = "Treasure";
+                eventType = "Loot";
             }
             else
             {
@@ -139,13 +159,19 @@ namespace TextAdventure
                     eventDescription = "A bandit dashes out from a rocky outcropping sword in hand.";
                     eventSuccess = "You parry the bandits blade and swiftly disbatch them.";
                     eventFail = "You fumble for you sword as the bandit strikes you across the chest.";
-                    eventAlt = "Reaching in your puch you pull out some of you treasure and toss it in another direction. The bandit is distracted long enough for you to get awawy.";
+                    eventAlt = "Reaching in your pouch you pull out some of you treasure and toss it in another direction.\n" +
+                        "The bandit is distracted long enough for you to get awawy.";
                     break;
                 case "Combat3":
-                    eventDescription = "You enter a large cavern. A deep rumble shakes the ground around you. In the darkness a large yellow eye opens.";
-                    eventSuccess = "Looking around in panick you notice a pillar leaning slightly. You dash toward it striking it with you shoulder. The pillar creaks and falls onto the beast.";
+                    eventDescription = "You enter a large cavern. A deep rumble shakes the ground around you.\n" +
+                        "In the darkness a large yellow eye opens.";
+                    eventSuccess = "Looking around in panick you notice a pillar leaning slightly.\n" +
+                        "You dash toward it striking it with you shoulder.\n" +
+                        "The pillar creaks and falls onto the beast.";
                     eventFail = "Before you can register what it is the monster strikes fligging you across the room.";
-                    eventAlt = "From your pouch you produce a large gem and plead with the beast. A claw emerges from the shadows and picks up the gem. You are allowed to continue on.";
+                    eventAlt = "From your pouch you produce a large gem and plead with the beast.\n" +
+                        "A claw emerges from the shadows and picks up the gem.\n" +
+                        "You are allowed to continue on.";
                     break;
                 case "Puzzle1":
                     eventDescription = "A old wooden door with a rusty lock bars you path into the next room.";
@@ -155,13 +181,17 @@ namespace TextAdventure
                     break;
                 case "Puzzle2":
                     eventDescription = "Three doors stand in your path each appearing to be identical.";
-                    eventSuccess = "From under the left door you feel a feight breeze. You open the door an proceeed onwards.";
+                    eventSuccess = "From under the left door you feel a feight breeze.\n" +
+                        "You open the door an proceeed onwards.";
                     eventFail = "You open the closet door and walk through and notice there is no floor beneath your feet.";
-                    eventAlt = "No need for thinking you open the first door and a spear comes shooting out. However, you react quicly dodge it.";
+                    eventAlt = "No need for thinking you open the first door and a spear comes shooting out.\n" +
+                        "However, you react quicly dodge it.";
                     break;
                 case "Puzzle3":
-                    eventDescription = "As you enter the next room the door slams shut behind you and the room goes dark. A mirror lights up on the other side of the room.";
-                    eventSuccess = "Shifting your reflection you notice another door only in the reflection. You move to open the door from the mirror perspective. The door opens and continue onwards.";
+                    eventDescription = "As you enter the next room the door slams shut behind you and the room goes dark.\n" +
+                        "A mirror lights up on the other side of the room.";
+                    eventSuccess = "Shifting your reflection you notice another door only in the reflection.\n" +
+                        "You move to open the door from the mirror perspective. The door opens and continue onwards.";
                     eventFail = "In frustration you shatter the mirror. Shards of glass cut you into you. ";
                     eventAlt = "You smash into the wall until you make your own door.";
                     break;
@@ -173,9 +203,11 @@ namespace TextAdventure
                     break;
                 case "Challenge2":
                     eventDescription = "From behind you comes a rumbling sound as you see a large bolder rolling your way.";
-                    eventSuccess = "You run as fast as your legs will carry you. Down the fall you see a split in the path. You go right just as the bolder rolls by on your left.";
+                    eventSuccess = "You run as fast as your legs will carry you. Down the fall you see a split in the path.\n" +
+                        "You go right just as the bolder rolls by on your left.";
                     eventFail = "You are far to slow and the bolder overtakes and you are curshed.";
-                    eventAlt = "Grabing random items from your pouch you create a chock and brace yourself. Miraculously the boulder is stopped.";
+                    eventAlt = "Grabing random items from your pouch you create a chock and brace yourself.\n" +
+                        "Miraculously the boulder is stopped.";
                     break;
                 case "Challenge3":
                     eventDescription = "With your next step you hear a click and a whoosh of air as arrows fly out of the wall.";
@@ -183,23 +215,39 @@ namespace TextAdventure
                     eventFail = "Try as you might you are bombarded by arrows.";
                     eventAlt = "You take your sheild and pouch holder one in each arm allowing the arrow to strike into them.";
                     break;
-                case "Treasure1":
-                    eventDescription = "You find a bag of discarded trinkets.";
+                case "Loot1":
+                    eventDescription = "You find a bag of discarded trinkets. \n" +
+                        "You gain 1 Loot";
+                    playerStats[4] += 1;
                     break;
-                case "Treasure2":
-                    eventDescription = "The body of a previous adventurer lies in you path. You decide to take their goods. Might help you survive longer then them.";
+                case "Loot2":
+                    eventDescription = "The body of a previous adventurer lies in you path. You decide to take their goods.\n" +
+                        "Might help you survive longer then them.\n" +
+                        "You gain 2 Loot";
+                    playerStats[4] += 2;
                     break;
-                case "Treasure3":
-                    eventDescription = "Gleaming light can be seen down the hall. You walk into a room with piles of gold. You pocket a few handfuls.";
+                case "Loot3":
+                    eventDescription = "Gleaming light can be seen down the hall. You walk into a room with piles of gold.\n" +
+                        "You pocket a few handfuls.\n" +
+                        "You gain 3 Loot";
+                    playerStats[4] += 3;
                     break;
                 case "Rest1":
-                    eventDescription = "You stumble upon a knook in the dungeon and settle down to rest. You can hear ominous footsteps in the distance.";
+                    eventDescription = "You stumble upon a knook in the dungeon and settle down to rest.\n" +
+                        "You can hear ominous footsteps in the distance. \n" +
+                        "You gain 1 Heart";
+                    playerStats[1] += 1;
                     break;
                 case "Rest2":
-                    eventDescription = "You open the door into an empty room. You decide to bar the door and take a short rest.";
+                    eventDescription = "You open the door into an empty room. You decide to bar the door and take a short rest.\n" +
+                        "You gain 2 Heart";
+                    playerStats[1] += 2;
                     break;
                 case "Rest3":
-                    eventDescription = "You stumble upon a open cavern a glowing pool of water at its center. You take a sip and feel rejuvinated.";
+                    eventDescription = "You stumble upon a open cavern a glowing pool of water at its center.\n" +
+                        "You take a sip and feel rejuvinated. \n" +
+                        "You gain 3 Heart";
+                    playerStats[1] += 3;
                     break;
                 default:
                     eventDescription = "ERROR";
@@ -228,31 +276,31 @@ namespace TextAdventure
             switch (eventType + eventLvl)
             {
                 case "Combat1":
-                    Console.WriteLine("Fight = 1 / Bargain = 2");
+                    Console.WriteLine("Enter: 1 = Fight / 2 = Bargain");
                     break;
                 case "Combat2":
-                    Console.WriteLine("Fight = 1 / Bargain = 2");
+                    Console.WriteLine("Enter: 1 = Fight / 2 = Bargain");
                     break;
                 case "Combat3":
-                    Console.WriteLine("Fight = 1 / Bargain = 2");
+                    Console.WriteLine("Enter: 1 = Fight / 2 = Bargain");
                     break;
                 case "Puzzle1":
-                    Console.WriteLine("Solve = 1 / Brute = 2");
+                    Console.WriteLine("Enter: 1 = Solve / 2 = Brute");
                     break;
                 case "Puzzle2":
-                    Console.WriteLine("Solve = 1 / Brute = 2");
+                    Console.WriteLine("Enter: 1 = Solve / 2 = Brute");
                     break;
                 case "Puzzle3":
-                    Console.WriteLine("Solve = 1 / Brute = 2");
+                    Console.WriteLine("Enter: 1 = Solve / 2 = Brute");
                     break;
                 case "Challenge1":
-                    Console.WriteLine("Survive = 1 / Craft = 2");
+                    Console.WriteLine("Enter: 1 = Survive / 2 = Craft");
                     break;
                 case "Challenge2":
-                    Console.WriteLine("Survive = 1 / Craft = 2");
+                    Console.WriteLine("Enter: 1 = Survive / 2 = Craft");
                     break;
                 case "Challenge3":
-                    Console.WriteLine("Survive = 1 / Craft = 2");
+                    Console.WriteLine("Enter: 1 = Survive / 2 = Craft");
                     break;
                 default:
                     break;
@@ -286,7 +334,7 @@ namespace TextAdventure
             int heart = playerStats[1];
             int mind = playerStats[2];
             int body = playerStats[3];
-            
+            int loot = playerStats[4];
             int playerChance = 0;
 
             int eventChance = GenerateRandomInt(1, 100);
@@ -304,10 +352,11 @@ namespace TextAdventure
                         switch (playerInput)
                         {
                             case 1:
-                                playerChance = 75 + (body + mind / 100);
+                                playerChance = 75 + (body + mind / 100) - lvl;
                                 break;
                             case 2:
-                                playerChance = 75 + (body + mind / 100); // +treasure later ;
+                                playerChance = 75 + (body + mind / 100) + 10 - lvl;
+                                    ;
                                 break;
                         }
                         break;
@@ -316,10 +365,10 @@ namespace TextAdventure
                         switch (playerInput)
                         {
                             case 1:
-                                playerChance = 50 + (body + mind / 100);
+                                playerChance = 50 + (body + mind / 100) - lvl;
                                 break;
                             case 2:
-                                playerChance = 50 + (body + mind / 100); // +treasure later ;
+                                playerChance = 50 + (body + mind / 100) + 10 - lvl;
                                 break;
                         }
 
@@ -329,15 +378,12 @@ namespace TextAdventure
                         switch (playerInput)
                         {
                             case 1:
-                                playerChance = 25 + (body + mind / 100);
+                                playerChance = 25 + (body + mind / 100) - lvl;
                                 break;
                             case 2:
-                                playerChance = 25 + (body + mind / 100); // +treasure later ;
+                                playerChance = 25 + (body + mind / 100) +10 - lvl;
                                 break;
                         }
-                        break;
-
-                    default:
                         break;
                 }
 
@@ -353,10 +399,10 @@ namespace TextAdventure
                         switch (playerInput)
                         {
                             case 1:
-                                playerChance = 75 + (mind / 100);
+                                playerChance = 75 + (mind / 100) - lvl;
                                 break;
                             case 2:
-                                playerChance = 75 + (mind / 100); // +treasure later ;
+                                playerChance = 75 + ((body - mind) / 100) - lvl; 
                                 break;
                         }
                         break;
@@ -364,10 +410,10 @@ namespace TextAdventure
                         switch (playerInput)
                         {
                             case 1:
-                                playerChance = 50 + (mind / 100);
+                                playerChance = 50 + (mind / 100) - lvl;
                                 break;
                             case 2:
-                                playerChance = 50 + (mind / 100); // +treasure later ;
+                                playerChance = 50 + ((body - mind) / 100) - lvl;
                                 break;
                         }
                         break;
@@ -375,15 +421,12 @@ namespace TextAdventure
                         switch (playerInput)
                         {
                             case 1:
-                                playerChance = 25 + (mind / 100);
+                                playerChance = 25 + (mind / 100) - lvl;
                                 break;
                             case 2:
-                                playerChance = 25 + (mind / 100); // +treasure later ;
+                                playerChance = 25 + ((body - mind) / 100) - lvl;
                                 break;
                         }
-                        break;
-
-                    default:
                         break;
                 }
             }
@@ -397,10 +440,10 @@ namespace TextAdventure
                         switch (playerInput)
                         {
                             case 1:
-                                playerChance = 75 + (body / 100);
+                                playerChance = 75 + (body / 100) - lvl;
                                 break;
                             case 2:
-                                playerChance = 75 + (body / 100); // +treasure later ;
+                                playerChance = 75 + (body / 100) + 10 - lvl;
                                 break;
                         }
                         break;
@@ -408,10 +451,10 @@ namespace TextAdventure
                         switch (playerInput)
                         {
                             case 1:
-                                playerChance = 50 + (body / 100);
+                                playerChance = 50 + (body / 100) - lvl;
                                 break;
                             case 2:
-                                playerChance = 50 + (body / 100); // +treasure later ;
+                                playerChance = 50 + (body / 100) + 10 - lvl;
                                 break;
                         }
                         break;
@@ -419,15 +462,12 @@ namespace TextAdventure
                         switch (playerInput)
                         {
                             case 1:
-                                playerChance = 25 + (body / 100);
+                                playerChance = 25 + (body / 100) - lvl;
                                 break;
                             case 2:
-                                playerChance = 25 + (body / 100); // +treasure later ;
+                                playerChance = 25 + (body / 100) + 10 - lvl;
                                 break;
                         }
-                        break;
-
-                    default:
                         break;
                 }
             }
