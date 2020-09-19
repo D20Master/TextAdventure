@@ -11,7 +11,7 @@ namespace TextAdventure
             int[] playerStats = GenerateStats();
             string[] eventDetails = null;
 
-            while (playerStats[0] <= 10)
+            while (playerStats[0] <= 10 || playerStats[1] != 0)
             {
 
                 //Display player stats and generates first event.
@@ -19,10 +19,42 @@ namespace TextAdventure
                 eventDetails = GenerateEvent();
                 Console.WriteLine(eventDetails[2]);
 
-                //Display player actions and get response.
+                //Display player choices and outcome
                 PlayerActions(eventDetails);
 
-                playerStats[0]++;
+                if (LevelUpEvent(eventDetails))
+                {
+                    string successEvent = eventDetails[3];
+                    string failEvent = eventDetails[4];
+                    string altEvent = eventDetails[5];
+
+                    int playerInput = int.Parse(Console.ReadLine());
+
+                    if (PlayerOutcome(playerStats, eventDetails, playerInput))
+                    {
+                        if (playerInput==1)
+                        {
+                            Console.WriteLine(successEvent);
+                        }
+                        else
+                        {
+                            Console.WriteLine(altEvent);
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine(failEvent);
+                        playerStats[1]--;
+                        Console.ReadLine();
+                    }
+
+                    playerStats[0]++;
+                }
+                else
+                {
+                    Console.ReadLine();
+                }
+
                 Console.WriteLine();
 
             }
@@ -61,7 +93,7 @@ namespace TextAdventure
 
         public static string[] GenerateEvent()
         {
-            string[] eventDetails = new string[9];
+            string[] eventDetails = new string[8];
 
             int rnd = GenerateRandomInt(1, 101);
 
@@ -70,7 +102,6 @@ namespace TextAdventure
             string eventDescription = null;
             string eventSuccess = null;
             string eventFail = null;
-            string eventRun = null;
             string eventAlt = null;
 
 
@@ -159,7 +190,7 @@ namespace TextAdventure
                     eventDescription = "The body of a previous adventurer lies in you path. You decide to take their goods. Might help you survive longer then them.";
                     break;
                 case "Treasure3":
-                    eventDescription = "Gleaming light can be seen down the hall. You walk into a room with piles of gold. You pocket a few handfuls and continue on.";
+                    eventDescription = "Gleaming light can be seen down the hall. You walk into a room with piles of gold. You pocket a few handfuls.";
                     break;
                 case "Rest1":
                     eventDescription = "You stumble upon a knook in the dungeon and settle down to rest. You can hear ominous footsteps in the distance.";
@@ -174,7 +205,6 @@ namespace TextAdventure
                     eventDescription = "ERROR";
                     break;
 
-
             }
 
             eventDetails[0] = eventType;
@@ -182,8 +212,7 @@ namespace TextAdventure
             eventDetails[2] = eventDescription;
             eventDetails[3] = eventSuccess;
             eventDetails[4] = eventFail;
-            eventDetails[5] = eventRun;
-            eventDetails[6] = eventAlt;
+            eventDetails[5] = eventAlt; 
 
             return eventDetails;
 
@@ -195,62 +224,218 @@ namespace TextAdventure
 
             string eventType = eventDetails[0];
             string eventLvl = eventDetails[1];
-                
+
             switch (eventType + eventLvl)
             {
                 case "Combat1":
-
-                    Console.WriteLine("Fight = 1 / Flee = 2 / Bargain = 3");
-                    
+                    Console.WriteLine("Fight = 1 / Bargain = 2");
                     break;
                 case "Combat2":
-
-                    Console.WriteLine("Fight = 1 / Flee = 2 / Bargain = 3");
-
+                    Console.WriteLine("Fight = 1 / Bargain = 2");
                     break;
                 case "Combat3":
-
-                    Console.WriteLine("Fight = 1 / Flee = 2 / Bargain = 3");
-
+                    Console.WriteLine("Fight = 1 / Bargain = 2");
                     break;
                 case "Puzzle1":
-
                     Console.WriteLine("Solve = 1 / Brute = 2");
-
                     break;
                 case "Puzzle2":
-
                     Console.WriteLine("Solve = 1 / Brute = 2");
-
                     break;
                 case "Puzzle3":
-
                     Console.WriteLine("Solve = 1 / Brute = 2");
-
                     break;
                 case "Challenge1":
-
                     Console.WriteLine("Survive = 1 / Craft = 2");
-
                     break;
                 case "Challenge2":
-
                     Console.WriteLine("Survive = 1 / Craft = 2");
-
                     break;
                 case "Challenge3":
-
                     Console.WriteLine("Survive = 1 / Craft = 2");
                     break;
-
                 default:
-                    Console.WriteLine("You continue onwards.");
-
                     break;
 
             }
 
         }
+
+        public static bool LevelUpEvent(string[] eventDetails)
+        {
+            string eventType = eventDetails[0];
+            switch (eventType)
+            {
+                case "Combat":
+                    return true;
+
+                case "Puzzle":
+                    return true;
+
+                case "Challenge":
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
+        public static bool PlayerOutcome(int[] playerStats, string[] eventDetails, int playerInput)
+        {
+            int lvl = playerStats[0];
+            int heart = playerStats[1];
+            int mind = playerStats[2];
+            int body = playerStats[3];
+            
+            int playerChance = 0;
+
+            int eventChance = GenerateRandomInt(1, 100);
+
+            string eventType = eventDetails[0];
+            int eventLvl = int.Parse(eventDetails[1]);
+
+            if (eventType =="Combat")
+            {
+                switch (eventLvl)
+                {
+
+                    case 1:
+
+                        switch (playerInput)
+                        {
+                            case 1:
+                                playerChance = 75 + (body + mind / 100);
+                                break;
+                            case 2:
+                                playerChance = 75 + (body + mind / 100); // +treasure later ;
+                                break;
+                        }
+                        break;
+                    case 2:
+
+                        switch (playerInput)
+                        {
+                            case 1:
+                                playerChance = 50 + (body + mind / 100);
+                                break;
+                            case 2:
+                                playerChance = 50 + (body + mind / 100); // +treasure later ;
+                                break;
+                        }
+
+                        break;
+                    case 3:
+
+                        switch (playerInput)
+                        {
+                            case 1:
+                                playerChance = 25 + (body + mind / 100);
+                                break;
+                            case 2:
+                                playerChance = 25 + (body + mind / 100); // +treasure later ;
+                                break;
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+
+
+            }
+
+            if (eventType == "Puzzle")
+            {
+                switch (eventLvl)
+                {
+
+                    case 1:
+                        switch (playerInput)
+                        {
+                            case 1:
+                                playerChance = 75 + (mind / 100);
+                                break;
+                            case 2:
+                                playerChance = 75 + (mind / 100); // +treasure later ;
+                                break;
+                        }
+                        break;
+                    case 2:
+                        switch (playerInput)
+                        {
+                            case 1:
+                                playerChance = 50 + (mind / 100);
+                                break;
+                            case 2:
+                                playerChance = 50 + (mind / 100); // +treasure later ;
+                                break;
+                        }
+                        break;
+                    case 3:
+                        switch (playerInput)
+                        {
+                            case 1:
+                                playerChance = 25 + (mind / 100);
+                                break;
+                            case 2:
+                                playerChance = 25 + (mind / 100); // +treasure later ;
+                                break;
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+            if (eventType == "Challenge")
+            {
+                switch (eventLvl)
+                {
+
+                    case 1:
+                        switch (playerInput)
+                        {
+                            case 1:
+                                playerChance = 75 + (body / 100);
+                                break;
+                            case 2:
+                                playerChance = 75 + (body / 100); // +treasure later ;
+                                break;
+                        }
+                        break;
+                    case 2:
+                        switch (playerInput)
+                        {
+                            case 1:
+                                playerChance = 50 + (body / 100);
+                                break;
+                            case 2:
+                                playerChance = 50 + (body / 100); // +treasure later ;
+                                break;
+                        }
+                        break;
+                    case 3:
+                        switch (playerInput)
+                        {
+                            case 1:
+                                playerChance = 25 + (body / 100);
+                                break;
+                            case 2:
+                                playerChance = 25 + (body / 100); // +treasure later ;
+                                break;
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+            return playerChance > eventChance;
+
+        }
+
     }
 }       
 
