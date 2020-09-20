@@ -30,7 +30,7 @@ namespace TextAdventure
                     string failEvent = eventDetails[4];
                     string altEvent = eventDetails[5];
 
-                    int playerInput = int.Parse(Console.ReadLine());
+                    int playerInput = PlayerInput();
                     Console.WriteLine();
 
                     if (PlayerOutcome(playerStats, eventDetails, playerInput))
@@ -40,18 +40,21 @@ namespace TextAdventure
                         {
                             Console.WriteLine(successEvent);
                             Console.WriteLine("Click Enter to continue.");
+                            PlayerStatIncrease(playerStats, eventDetails);
                         }
                         else if (LootCheck(playerStats)) //succeful event alt
                         { 
                             Console.WriteLine(altEvent);
                             Console.WriteLine("You used up 1 loot.");
                             Console.WriteLine("Click Enter to continue.");
+                            PlayerStatIncrease(playerStats, eventDetails);
                             playerStats[4]--;
                         }
                         else
                         {
                             Console.WriteLine("You fumbled through your empty pockets");
                             Console.WriteLine(successEvent); // if no loot revert to other
+                            PlayerStatIncrease(playerStats, eventDetails);
                         }
 
                     }
@@ -479,6 +482,26 @@ namespace TextAdventure
 
         }
 
+        public static void PlayerStatIncrease(int[] playerStats, string[] eventDetails)
+        {
+            string eventType = eventDetails[0];
+            switch (eventType)
+            {
+                case "Combat":
+                    playerStats[2]++;
+                    playerStats[3]++;
+                    break;
+                case "Puzzle":
+                    playerStats[2]++;
+                    break;
+                case "Challenge":
+                    playerStats[3]++;
+                    break;
+                default:
+                    break;
+            }
+        }
+
         public static void Instructions()
         {
             Console.WriteLine("You are about to embark on a quest to reach the lowest floor of the dungeon\n" +
@@ -493,6 +516,13 @@ namespace TextAdventure
             Console.Clear();
         }
 
+        public static int PlayerInput()
+        {
+            int playerInput = 0;
+            while (!int.TryParse(Console.ReadLine(), out playerInput))
+                Console.WriteLine("Try again");
+            return playerInput;
+        }
     }
 }       
 
