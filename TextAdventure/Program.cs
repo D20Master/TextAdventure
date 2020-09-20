@@ -8,6 +8,8 @@ namespace TextAdventure
     {
         static void Main(string[] args)
         {
+            Instructions();
+
             int[] playerStats = GenerateStats();
             string[] eventDetails = null;
 
@@ -28,7 +30,6 @@ namespace TextAdventure
                     string failEvent = eventDetails[4];
                     string altEvent = eventDetails[5];
 
-
                     int playerInput = int.Parse(Console.ReadLine());
                     Console.WriteLine();
 
@@ -43,9 +44,9 @@ namespace TextAdventure
                         else if (LootCheck(playerStats)) //succeful event alt
                         { 
                             Console.WriteLine(altEvent);
-                            Console.WriteLine("You used up 1 loot.\nClick Enter to continue.");
+                            Console.WriteLine("You used up 1 loot.");
+                            Console.WriteLine("Click Enter to continue.");
                             playerStats[4]--;
-
                         }
                         else
                         {
@@ -57,7 +58,8 @@ namespace TextAdventure
                     else
                     {
                         Console.WriteLine(failEvent);
-                        Console.WriteLine("You lost 1 heart.\nClick Enter to continue.");
+                        Console.WriteLine("You lost 1 heart.");
+                        Console.WriteLine("Click Enter to continue."); 
                         playerStats[1]--;
                     }
 
@@ -69,6 +71,7 @@ namespace TextAdventure
 
             }
 
+            Console.WriteLine($"Game Over you made it to the {playerStats[0]} floor of the dugeon.");
         }
 
         public static void DisplayStats(int level, int heart, int mind, int body, int loot)
@@ -183,7 +186,7 @@ namespace TextAdventure
                     eventDescription = "Three doors stand in your path each appearing to be identical.";
                     eventSuccess = "From under the left door you feel a feight breeze.\n" +
                         "You open the door an proceeed onwards.";
-                    eventFail = "You open the closet door and walk through and notice there is no floor beneath your feet.";
+                    eventFail = "You open the closest door. Walking through your notice there is no floor beneath your feet.";
                     eventAlt = "No need for thinking you open the first door and a spear comes shooting out.\n" +
                         "However, you react quicly dodge it.";
                     break;
@@ -210,7 +213,7 @@ namespace TextAdventure
                         "Miraculously the boulder is stopped.";
                     break;
                 case "Challenge3":
-                    eventDescription = "With your next step you hear a click and a whoosh of air as arrows fly out of the wall.";
+                    eventDescription = "With your next step you hear a click and a whoosh as arrows fly out of the wall.";
                     eventSuccess = "Your deftly manuver through the hall dogding the arrows.";
                     eventFail = "Try as you might you are bombarded by arrows.";
                     eventAlt = "You take your sheild and pouch holder one in each arm allowing the arrow to strike into them.";
@@ -474,6 +477,20 @@ namespace TextAdventure
 
             return playerChance > eventChance;
 
+        }
+
+        public static void Instructions()
+        {
+            Console.WriteLine("You are about to embark on a quest to reach the lowest floor of the dungeon\n" +
+                "and find the riches it holds. Your player is given 4 stats that determine your chances of\n" +
+                "survival. For each failed attempt during your quest you will lose 1 HEART. Don't worry if\n" +
+                "fortune favors you then you will find places to recover along the way. Speaking of fortune\n" +
+                "LOOT can also be gained along the way giving you a bonus to your chances of survival.\n" +
+                "BODY and MIND each give a bonus to your chance of success depending on the situation. Not\n" +
+                "all situations have the same level of success so use you loot sparingly. The rest you\n" +
+                "will have to figure out as you go. GOOD LUCK!" );
+            Console.ReadLine();
+            Console.Clear();
         }
 
     }
