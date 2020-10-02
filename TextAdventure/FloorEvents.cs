@@ -13,6 +13,8 @@
         private string _eventSuccess;
         private string _eventFail;
         private string _eventAlt;
+        private string _eventOutcome;
+        private bool _outcome;
 
         public string EventType { get { return _eventType; } }
         public int EventLvl { get { return _eventLvl; } }
@@ -20,8 +22,7 @@
         public string EventSucess { get { return _eventSuccess; } }
         public string EventFail { get { return _eventFail; } }
         public string EventAlt { get { return _eventAlt; } }
-
-
+        public bool Outcome { get { return _outcome; } }
 
         Generator roll = new Generator();
 
@@ -29,19 +30,19 @@
         {
             int num = roll.RandomInt(1, 101);
 
-            if (num <= 30)
+            if (num <= 35)
             {
                 _eventType = "Combat";
             }
-            else if (num <= 50)
+            else if (num <= 55)
             {
                 _eventType = "Puzzle";
             }
-            else if (num <= 70)
+            else if (num <= 75)
             {
                 _eventType = "Challenge";
             }
-            else if (num <= 85)
+            else if (num <= 90)
             {
                 _eventType = "Loot";
             }
@@ -60,7 +61,6 @@
         {
             GenerateType();
             GenerateLevel();
-
             switch (_eventType + _eventLvl)
             {
                 case "Combat1":
@@ -74,7 +74,7 @@
                     _eventSuccess = "You parry the bandits blade and swiftly disbatch them.";
                     _eventFail = "You fumble for you sword as the bandit strikes you across the chest.";
                     _eventAlt = "Reaching in your pouch you pull out some of you treasure and toss it in another direction.\n" +
-                        "The bandit is distracted long enough for you to get awawy.";
+                        "The bandit is distracted long enough for you to get away.";
                     break;
                 case "Combat3":
                     _eventDescription = "You enter a large cavern. A deep rumble shakes the ground around you.\n" +
@@ -127,7 +127,7 @@
                     _eventDescription = "With your next step you hear a click and a whoosh as arrows fly out of the wall.";
                     _eventSuccess = "Your deftly manuver through the hall dogding the arrows.";
                     _eventFail = "Try as you might you are bombarded by arrows.";
-                    _eventAlt = "You take your sheild and pouch holder one in each arm allowing the arrow to strike into them.";
+                    _eventAlt = "You take your shield and pouch in each arm and run, allowing the arrows to strike into them.";
                     break;
                 case "Loot1":
                     _eventDescription = "You find a bag of discarded trinkets. \n" +
@@ -178,11 +178,11 @@
             switch (_eventLvl)
             {
                 case 1:
-                    return eventChance <= 75 + ((body + mind) / 100) - lvl + bonus;
+                    return _outcome = (eventChance <= 75 + body + mind - (lvl*2) + bonus);
                 case 2:
-                    return eventChance <= 50 + ((body + mind)/ 100) - lvl + bonus;
+                    return _outcome = (eventChance <= 50 + body + mind- (lvl*2) + bonus);
                 case 3:
-                    return eventChance <= 25 + ((body + mind) / 100) - lvl + bonus;
+                    return _outcome = (eventChance <= 25 + body + mind - (lvl*2) + bonus);
                 default:
                     return false;
             }
@@ -195,17 +195,18 @@
 
             if (playerInput == 2)
             {
-                bonus = -10 + body;
+                bonus = body;
+
             }
 
             switch (_eventLvl)
             {
                 case 1:
-                    return eventChance <= 75 + (mind / 100) - lvl + bonus;
+                    return _outcome = (eventChance <= 75 + mind- lvl + bonus);
                 case 2:
-                    return eventChance <= 50 + (mind / 100) - lvl + bonus;
+                    return _outcome = (eventChance <= 50 + mind - lvl + bonus);
                 case 3:
-                    return eventChance <= 25 + (mind / 100) - lvl + bonus;
+                    return _outcome = (eventChance <= 25 + mind - lvl + bonus);
                 default:
                     return false;
             }
@@ -224,58 +225,50 @@
             switch (_eventLvl)
             {
                 case 1:
-                    return eventChance <= 75 + (body / 100) - lvl + bonus;
+                    return _outcome = (eventChance <= 75 + body - lvl + bonus);
                 case 2:
-                    return eventChance <= 50 + (body / 100) - lvl + bonus;
+                    return _outcome = (eventChance <= 50 + body - lvl + bonus);
                 case 3:
-                    return eventChance <= 25 + (body / 100) - lvl + bonus;
+                    return _outcome = (eventChance <= 25 + body - lvl + bonus);
                 default:
                     return false;
             }
         }
 
-        public string EventOutcome(int[] playerStats, int playerInput)
+        public string EventOutcome(int lvl, int heart, int mind, int body, int loot, int playerInput)
         {
-            int lvl = playerStats[0];
-            int heart = playerStats[1];
-            int mind = playerStats[2];
-            int body = playerStats[3];
-            int loot = playerStats[4];
-            string outcome = "";
-
             if (playerInput == 1)
             {
                 if (_eventType == "Combat")
                 {
-                    outcome = CombatOutcome(body, mind, lvl, playerInput) ? _eventSuccess : _eventFail;
+                    _eventOutcome = CombatOutcome(body, mind, lvl, playerInput) ? _eventSuccess : _eventFail;
                 }
                 if (_eventType == "Puzzle")
                 {
-                    outcome = PuzzleOutcome(body, mind, lvl, playerInput) ? _eventSuccess : _eventFail;
+                    _eventOutcome = PuzzleOutcome(body, mind, lvl, playerInput) ? _eventSuccess : _eventFail;
                 }
                 if (_eventType == "Challenge")
                 {
-                    outcome = ChallengeOutcome(body, lvl, playerInput) ? _eventSuccess : _eventFail;
+                    _eventOutcome = ChallengeOutcome(body, lvl, playerInput) ? _eventSuccess : _eventFail;
                 }
             }
             else 
             {
                 if (_eventType == "Combat")
                 {
-                    outcome = CombatOutcome(body, mind, lvl, playerInput) ? _eventAlt : _eventFail;
-
+                    _eventOutcome = CombatOutcome(body, mind, lvl, playerInput) ? _eventAlt : _eventFail;
                 }
                 if (_eventType == "Puzzle")
                 {
-                    outcome = PuzzleOutcome(body, mind, lvl, playerInput) ? _eventAlt : _eventFail;
+                    _eventOutcome = PuzzleOutcome(body, mind, lvl, playerInput) ? _eventAlt : _eventFail;
                 }
                 if (_eventType == "Challenge")
                 {
-                    outcome = ChallengeOutcome(body, lvl, playerInput) ? _eventAlt : _eventFail;
+                    _eventOutcome = ChallengeOutcome(body, lvl, playerInput) ? _eventAlt : _eventFail;
                 }
             }
 
-            return outcome;
+            return _eventOutcome;
         }
 
         

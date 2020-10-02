@@ -25,18 +25,6 @@ namespace TextAdventure
         }
 
 
-        public int PlayerInput()
-        {
-            int input = 0;
-            
-            while (!int.TryParse(Console.ReadLine(), out input))
-            {
-                Console.WriteLine("Try again");
-            }
-            return input;
-        }
-
-
         public void PlayerActions(string eventDetails)
         {
             switch (eventDetails)
