@@ -116,11 +116,11 @@
                     _eventAlt = "From your pouch you grab a grappling hook and throw it across to the other side.";
                     break;
                 case "Challenge2":
-                    _eventDescription = "From behind you comes a rumbling sound as you see a large bolder rolling your way.";
+                    _eventDescription = "From behind you comes a rumbling sound as you see a large boulder rolling your way.";
                     _eventSuccess = "You run as fast as your legs will carry you. Down the fall you see a split in the path.\n" +
                         "You go right just as the bolder rolls by on your left.";
-                    _eventFail = "You are far to slow and the bolder overtakes and you are curshed.";
-                    _eventAlt = "Grabing random items from your pouch you create a chock and brace yourself.\n" +
+                    _eventFail = "You are far to slow and the boulder overtakes and you are curshed.";
+                    _eventAlt = "Grabbing random items from your pouch you create a chock and brace yourself.\n" +
                         "Miraculously the boulder is stopped.";
                     break;
                 case "Challenge3":

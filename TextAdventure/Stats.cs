@@ -43,7 +43,7 @@ namespace TextAdventure
         protected void GenerateStats()
         {
             _level = 1;
-            _heart =10;
+            _heart = 6;
             _mind = roll.RandomInt(1, 4);
             _body = roll.RandomInt(1, 4);
             _loot = roll.RandomInt(1, 3);

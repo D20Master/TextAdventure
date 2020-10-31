@@ -12,8 +12,10 @@ namespace TextAdventure
             Stats dungeoner = new Stats();
             FloorEvent room = new FloorEvent();
 
-            while (dungeoner.Heart != 0)
+            while (dungeoner.Heart > 0)
             {
+                var x = dungeoner.Heart;
+                var y = dungeoner.Level;
                 Console.Clear(); //start fresh
                 dungeoner.DisplayStats(); //display stats
                 room.DisplayEvents(); // events of room
@@ -61,6 +63,11 @@ namespace TextAdventure
 
                 dungeoner.Level++;
                 Console.ReadLine();
+
+                if (dungeoner.Level > 50)
+                {
+                    GameOver(dungeoner.Level);
+                }
             }
 
             GameOver(dungeoner.Level);
@@ -71,22 +78,37 @@ namespace TextAdventure
         {
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine(" You are about to embark on a quest to reach the lowest floor of the dungeon\n" +
-                "and find the riches it holds. Your player is given 4 stats that determine your chances of\n" +
-                "survival. For each failed attempt during your quest you will lose 1 HEART. Don't worry if\n" +
-                "fortune favors you then you will find places to recover along the way. Speaking of fortune\n" +
-                "LOOT can also be gained along the way giving you a bonus to your chances of survival.\n" +
-                "BODY and MIND each give a bonus to your chance of success depending on the situation. Not\n" +
-                "all situations have the same level of success so use you LOOT sparingly. The rest you\n" +
-                "will have to figure out as you go. GOOD LUCK!");
+            Console.WriteLine(" You are about to embark on a quest to reach the lowest floor of the dungeon" +
+                " and find the riches it holds. Your player is given 4 stats that determine your chances of" +
+                " survival. For each failed attempt during your quest you will lose 1 HEART. Don't worry if" +
+                " fortune favors you then you will find places to recover along the way. Speaking of fortune" +
+                " LOOT can also be gained along the way giving you a bonus to your chances of survival." +
+                " BODY and MIND each give a bonus to your chance of success depending on the situation. Not" +
+                " all situations have the same level of success so use you LOOT sparingly. The rest you" +
+                " will have to figure out as you go. GOOD LUCK!");
             Console.ReadLine();
             Console.Clear();
         }
 
         public static void GameOver(int lvl)
         {
-            Console.WriteLine("GAME OVER");
-            Console.WriteLine($"You have fought long and hard but only made it to floor level {lvl}");
+            if (lvl < 50)
+            {
+                Console.Clear();
+                Console.WriteLine("GAME OVER");
+                Console.WriteLine($"You have fought long and hard but only made it to floor level {lvl}");
+            }
+            else
+            {
+                Console.Clear();
+                Console.WriteLine("You have reach the lowest floor of the dungeon I currently have programmed."+
+                    "I honesly thought it'd be near impossible to make it this far, but you did it. All that is left" +
+                    "to do is make this game harder. Oh... almost forgot... the riches... ummmmmm... yea.... you learned" +
+                    "the valuable lesson of hardwork!");
+                Environment.Exit(0);
+
+            }
+
         }
 
     }
